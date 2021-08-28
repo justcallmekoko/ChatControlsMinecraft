@@ -10,6 +10,8 @@ from string import printable
 from dotenv import load_dotenv
 from mcrcon import MCRcon
 from discord.ext.tasks import loop
+from twitchio.ext import commands
+from ast import literal_eval as make_tuple
 import random
 import pkgutil
 
@@ -25,15 +27,12 @@ C  = '\033[36m' # cyan
 GR = '\033[37m' # gray
 T  = '\033[93m' # tan
 
-global TWITT
 global twitch_server
 global sock
 
 load_dotenv()
-TWITT = os.getenv('TWITCH_TOKEN')
-TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
-PASSW = os.getenv('RCON_PASSWORD')
+TWITCH_TOKEN = os.getenv('TWITCH_TOKEN')
+RCON_PASSWORD = os.getenv('RCON_PASSWORD')
 RCON_IP = os.getenv('RCON_IP')
 NICK = str(os.getenv('NICK'))
 INITIAL_CHANNELS = str(os.getenv('INITIAL_CHANNELS'))
@@ -44,73 +43,97 @@ obj_list = []
 path = os.path.join(os.path.dirname(__file__), "plugins")
 modules = pkgutil.iter_modules(path=[path])
 
+print('Going to join channel: ' + INITIAL_CHANNELS)
+
+nick = str(NICK)
+
+random.seed(datetime.now())
+
+bot = commands.Bot(
+	irc_token=TWITCH_TOKEN,
+	api_token=API_TOKEN,
+	client_id=CLIENT_ID,
+	nick=nick,
+	prefix=PREFIX,
+	initial_channels=[INITIAL_CHANNELS],
+	token=TWITCH_TOKEN
+)
+
+@bot.event
+async def event_ready():
+	print(f'Ready | {bot.nick}')
+
+@bot.event
+async def event_webhook(webhook):
+	print('Webhook event')
+
+@bot.event
+async def event_join(user):
+	print('User joined: ' + str(user.name))
+
+@bot.event
+async def event_message(message):
+	print(str(message.author.name) + ': ' + (message.content))
+
+	# If you override event_message you will need to handle_commands for commands to work.
+	await handle_cheers(message)
+
 # Functions to work with twitch
 async def handle_cheers(message):
-	global sock
 	global obj_list
 	
 	bad_chars = 'abcdefghijklmnopqrstuvwxyzABZDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()`~-_=+[{]}\|;:\'",<.>/?'
+		
+	contained_cheer = False
 	
-	print('Waiting for twitch shit...')
-
-	while True:
-		
-		contained_cheer = False
-		
-		cheer_amount = 0
-		
-		#Parse cheers
-		
-		for resp_sub in resp.split(' '):
-			if 'Cheer' in str(resp_sub):
-				raw_cheer_amount = resp_sub.replace(':51\r\n', '').replace('Cheer', '').replace('\n', '').replace(':', '')
-				cheer_amount = ''.join(char for char in raw_cheer_amount if char in printable)
-				contained_cheer = True
-				print('Cheer amount: ' + str(cheer_amount))
-		
-		#for sub in str(resp).split(' '):
-		#	if 'Cheer' in sub:
-		#		#cheer_amount = int(float(sub.replace('Cheer', '').replace(':51\r\n', '')))
-		#		cheer_amount = re.sub("[^0-9]", "", sub)
-		#		contained_cheer = True
-		#		print('Cheer amount: ' + str(cheer_amount))
-		#		break
-		
-		bad_char_found = False
-		
-		for i in list(bad_chars):
-			if str(i) in str(cheer_amount):
-				bad_char_found = True
-				
-		if ((not re.search('[a-zA-Z]', str(cheer_amount))) and (not bad_char_found)):
-			cheer_amount = re.sub("[^0-9]", "", str(cheer_amount))
-			if (contained_cheer) and (int(cheer_amount) > 0):
-				# Get bot category
-				for obj in obj_list:
-					if obj.checkBits(int(cheer_amount)):
-						cat = obj.cat
-						
-				# Stop all plugins with same category
-				for obj in obj_list:
-					if obj.checkCat(cat):
-						print('Stopping: ' + str(obj.name))
-						run_stop = asyncio.run(obj.stop(resp))
-					#await obj.stop(resp)
+	cheer_amount = 0
+	
+	resp = str(message.content)
+	
+	#Parse cheers
+	
+	for resp_sub in resp.split(' '):
+		if 'Cheer' in str(resp_sub):
+			raw_cheer_amount = resp_sub.replace(':51\r\n', '').replace('Cheer', '').replace('\n', '').replace(':', '')
+			cheer_amount = ''.join(char for char in raw_cheer_amount if char in printable)
+			contained_cheer = True
+			print('Cheer amount: ' + str(cheer_amount))
+	
+	bad_char_found = False
+	
+	for i in list(bad_chars):
+		if str(i) in str(cheer_amount):
+			bad_char_found = True
+			
+	if ((not re.search('[a-zA-Z]', str(cheer_amount))) and (not bad_char_found)):
+		cheer_amount = re.sub("[^0-9]", "", str(cheer_amount))
+		if (contained_cheer) and (int(cheer_amount) > 0):
+			# Get bot category
+			for obj in obj_list:
+				if obj.checkBits(int(cheer_amount)):
+					cat = obj.cat
 					
-				# Find the plugin with the cheer amount
-				for obj in obj_list:
-					if obj.checkBits(int(cheer_amount)):
-						found = True
-						print('Found plugin: ' + obj.name)
-						#if obj.admin and not admin:
-						#	await message.channel.send(message.author.mention + ' ' + str(cmd) + ' only admins may run this command')
-						#	break
-						
-						run_run = asyncio.run(obj.runCheer(obj.name + ' ' + str(resp).split('!')[0], int(cheer_amount)))
-						#await obj.run(obj.name)
-						break
-		else:
-			print('Cheer not valid: ' + str(cheer_amount))
+			# Stop all plugins with same category
+			for obj in obj_list:
+				if obj.checkCat(cat):
+					print('Stopping: ' + str(obj.name))
+					run_stop = asyncio.run(obj.stop(resp))
+				#await obj.stop(resp)
+				
+			# Find the plugin with the cheer amount
+			for obj in obj_list:
+				if obj.checkBits(int(cheer_amount)):
+					found = True
+					print('Found plugin: ' + obj.name)
+					#if obj.admin and not admin:
+					#	await message.channel.send(message.author.mention + ' ' + str(cmd) + ' only admins may run this command')
+					#	break
+					
+					run_run = asyncio.run(obj.runCheer(obj.name + ' ' + str(resp).split('!')[0], int(cheer_amount)))
+					#await obj.run(obj.name)
+					break
+	else:
+		print('Cheer not valid: ' + str(cheer_amount))
 
 def get_class_name(mod_name):
 	output = ""
@@ -132,3 +155,4 @@ for loader, mod_name, ispkg in modules:
 		instance = loaded_class()
 		obj_list.append(instance)
 
+bot.run()
