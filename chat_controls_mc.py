@@ -59,7 +59,7 @@ class Bot(commands.Bot):
 		print(f'Logged in as | {self.nick}')
 
 	async def event_join(self, user, potato):
-		print('User joined: ' + str(user.name))
+		print('User joined: ' + str(potato.name))
 
 	# Functions to work with twitch
 	async def handle_cheers(self, message):	
@@ -110,7 +110,7 @@ class Bot(commands.Bot):
 						#	await message.channel.send(message.author.mention + ' ' + str(cmd) + ' only admins may run this command')
 						#	break
 					
-						run_run = await obj.runCheer(obj.name + ' ' + str(resp).split('!')[0], int(cheer_amount))
+						run_run = await obj.runCheer(obj.name + ' ' + message.author.name, int(cheer_amount))
 						#await obj.run(obj.name)
 						break
 		else:
