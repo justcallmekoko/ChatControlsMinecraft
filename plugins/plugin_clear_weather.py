@@ -45,7 +45,7 @@ class ClearWeather():
 			
 	async def runCheer(self, user, amount):
 		print ('Running clear weather enabled on...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': clear weather enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
 
