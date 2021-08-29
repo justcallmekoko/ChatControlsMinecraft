@@ -36,6 +36,8 @@ RCON_PASSWORD = os.getenv('RCON_PASSWORD')
 RCON_IP = os.getenv('RCON_IP')
 NICK = str(os.getenv('NICK'))
 INITIAL_CHANNELS = str(os.getenv('INITIAL_CHANNELS'))
+CLIENT_ID=os.getenv('CLIENT_ID')
+PREFIX=os.getenv('PREFIX')
 
 global obj_list
 obj_list = []
