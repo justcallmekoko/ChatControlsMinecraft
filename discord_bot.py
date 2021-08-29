@@ -9,6 +9,7 @@ import discord
 from string import printable
 from dotenv import load_dotenv
 from mcrcon import MCRcon
+from datetime import datetime
 from discord.ext.tasks import loop
 from twitchio.ext import commands
 from ast import literal_eval as make_tuple
@@ -37,6 +38,7 @@ RCON_IP = os.getenv('RCON_IP')
 NICK = str(os.getenv('NICK'))
 INITIAL_CHANNELS = str(os.getenv('INITIAL_CHANNELS'))
 CLIENT_ID=os.getenv('CLIENT_ID')
+API_TOKEN=os.getenv('API_TOKEN')
 PREFIX=os.getenv('PREFIX')
 
 global obj_list
@@ -112,26 +114,26 @@ async def handle_cheers(message):
 		if (contained_cheer) and (int(cheer_amount) > 0):
 			# Get bot category
 			for obj in obj_list:
-				if obj.checkBits(int(cheer_amount)):
+				if await obj.checkBits(int(cheer_amount)):
 					cat = obj.cat
 					
 			# Stop all plugins with same category
 			for obj in obj_list:
 				if obj.checkCat(cat):
 					print('Stopping: ' + str(obj.name))
-					run_stop = asyncio.run(obj.stop(resp))
+					run_stop = await obj.stop(resp)
 				#await obj.stop(resp)
 				
 			# Find the plugin with the cheer amount
 			for obj in obj_list:
-				if obj.checkBits(int(cheer_amount)):
+				if await obj.checkBits(int(cheer_amount)):
 					found = True
 					print('Found plugin: ' + obj.name)
 					#if obj.admin and not admin:
 					#	await message.channel.send(message.author.mention + ' ' + str(cmd) + ' only admins may run this command')
 					#	break
 					
-					run_run = asyncio.run(obj.runCheer(obj.name + ' ' + str(resp).split('!')[0], int(cheer_amount)))
+					run_run = await obj.runCheer(obj.name + ' ' + str(resp).split('!')[0], int(cheer_amount))
 					#await obj.run(obj.name)
 					break
 	else:
