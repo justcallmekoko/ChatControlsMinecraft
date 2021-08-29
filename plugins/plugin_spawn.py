@@ -46,14 +46,14 @@ class Spawn():
 		[2000,'ender_dragon']
 		]
 		
-	def checkCat(self, check_cat):
+	async def checkCat(self, check_cat):
 		if self.cat == check_cat:
 			return True
 		else:
 			return False
 
 	
-	def checkBits(self, bits):
+	async def checkBits(self, bits):
 		found = False
 		for item in self.cheer:
 			if int(bits) == int(item[0]):

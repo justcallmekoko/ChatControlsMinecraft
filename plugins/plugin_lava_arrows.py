@@ -20,7 +20,7 @@ class LavaArrows():
 	
 	cat = 'arrows'
 	
-	def checkCat(self, check_cat):
+	async def checkCat(self, check_cat):
 		if self.cat == check_cat:
 			return True
 		else:
@@ -35,7 +35,7 @@ class LavaArrows():
 				#print (resp)
 				mcr.disconnect()
 				
-	def checkBits(self, bits):
+	async def checkBits(self, bits):
 		if bits == self.cheer:
 			return True
 		else:
