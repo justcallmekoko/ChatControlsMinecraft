@@ -119,7 +119,7 @@ async def handle_cheers(message):
 					
 			# Stop all plugins with same category
 			for obj in obj_list:
-				if obj.checkCat(cat):
+				if await obj.checkCat(cat):
 					print('Stopping: ' + str(obj.name))
 					run_stop = await obj.stop(resp)
 				#await obj.stop(resp)
