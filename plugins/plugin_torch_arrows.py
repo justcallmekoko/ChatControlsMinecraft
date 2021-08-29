@@ -4,6 +4,9 @@ from mcrcon import MCRcon
 from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
+HOST_USER = os.getenv('HOST_USER')
+RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class TorchArrows():
 	name = '!torcharrows'
@@ -29,7 +32,7 @@ class TorchArrows():
 	@loop(seconds = 0.1)
 	async def loop_func(self):
 		if self.looping:
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run setblock ~0 ~0 ~0 torch')
 				resp = mcr.command('/kill @e[type=arrow,nbt={inGround:1b}]')
 				#print (resp)
@@ -44,7 +47,7 @@ class TorchArrows():
 	async def stop(self, message):
 		if self.looping:
 			print ('Running torch arrows off...')
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say torch arrows disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"torch arrows disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -59,7 +62,7 @@ class TorchArrows():
 				
 	async def runCheer(self, user, amount):
 		print ('Running torch arrows on...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 		
 			# Send notification in minecraft
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': torch arrows enabled\",\"color\":\"green\"}]')
@@ -73,7 +76,7 @@ class TorchArrows():
 	# Function to activate loop
 	async def toggle(self, message):
 		print ('Running torch arrows on...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 		
 			# Send notification in minecraft
 			try:

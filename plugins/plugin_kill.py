@@ -6,6 +6,8 @@ from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
 HOST_USER = os.getenv('HOST_USER')
+RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class Kill():
 	name = '!kill'
@@ -43,7 +45,7 @@ class Kill():
 		
 		
 				
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			# Minecraft command to spawn X near player
 			#resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 			resp = mcr.command('/kill ' + str(HOST_USER))
@@ -55,7 +57,7 @@ class Kill():
 
 	async def run(self, message):			
 		print ('Spawning...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			# Minecraft command to spawn X near player
 			resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 

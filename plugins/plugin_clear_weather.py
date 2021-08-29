@@ -4,7 +4,9 @@ from mcrcon import MCRcon
 from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
+HOST_USER = os.getenv('HOST_USER')
 RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class ClearWeather():
 	name = '!clearweather'
@@ -53,7 +55,7 @@ class ClearWeather():
 	async def stop(self, message):
 		if self.looping:
 			print ('Running clear weather off...')
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say clear weather disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"clear weather disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -76,7 +78,7 @@ class ClearWeather():
 			
 		if message.content.split(' ')[1].lower() == 'on' and not self.looping:
 			print ('Running clear weather on...')
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say clear weather enabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"clear weather enabled\",\"color\":\"green\"}]')
 				#print (resp)

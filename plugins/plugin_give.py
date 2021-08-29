@@ -6,6 +6,8 @@ from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
 HOST_USER = os.getenv('HOST_USER')
+RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class Give():
 	name = '!give'
@@ -58,7 +60,7 @@ class Give():
 				found = True
 				ent = str(item[1])
 				
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			# Minecraft command to spawn X near player
 			#resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 			resp = mcr.command('/give ' + str(HOST_USER) + ' ' + str(ent))
@@ -70,7 +72,7 @@ class Give():
 
 	async def run(self, message):			
 		print ('Spawning...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			# Minecraft command to spawn X near player
 			resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 

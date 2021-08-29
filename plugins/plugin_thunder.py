@@ -4,6 +4,9 @@ from mcrcon import MCRcon
 from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
+HOST_USER = os.getenv('HOST_USER')
+RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class Thunder():
 	name = '!thunder'
@@ -29,7 +32,7 @@ class Thunder():
 	@loop(seconds = 1)
 	async def loop_func(self):
 		if self.looping:
-                        with MCRcon(RCON_IP, PASSW) as mcr:
+                        with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
                                 resp = mcr.command('/weather thunder')
                                 #print (resp)
                                 mcr.disconnect()
@@ -42,7 +45,7 @@ class Thunder():
 			
 	async def runCheer(self, user, amount):
 		print ('Running thunder weather enabled on...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': thunder weather enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
 
@@ -52,7 +55,7 @@ class Thunder():
 	async def stop(self, message):
 		if self.looping:
 			print ('Running thunder weather off...')
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say clear weather disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"thunder weather disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -75,7 +78,7 @@ class Thunder():
 			
 		if message.content.split(' ')[1].lower() == 'on' and not self.looping:
 			print ('Running thunder weather on...')
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say clear weather enabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"thunder weather enabled\",\"color\":\"green\"}]')
 				#print (resp)

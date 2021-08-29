@@ -4,7 +4,9 @@ from mcrcon import MCRcon
 from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
+HOST_USER = os.getenv('HOST_USER')
 RCON_IP=os.getenv('RCON_IP')
+RCON_PORT=os.getenv('RCON_PORT')
 
 class ExplodingArrows():
 	name = '!explodingarrows'
@@ -46,7 +48,7 @@ class ExplodingArrows():
 		if self.looping:
 			print ('Running Exploding arrows off...')
 
-			with MCRcon(RCON_IP, PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say Exploding arrows disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"exploding arrows disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -61,7 +63,7 @@ class ExplodingArrows():
 			
 	async def runCheer(self, user, amount):
 		print ('Running lava arrows on...')
-		with MCRcon(RCON_IP, PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': exploding arrows enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
 
