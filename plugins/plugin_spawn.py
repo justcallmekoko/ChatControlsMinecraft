@@ -80,6 +80,7 @@ class Spawn():
 				found = True
 				ent = str(item[1])
 				
+		print('RCON IP: ' + RCON_IP + ' port: ' + RCON_PORT)
 		with MCRcon(RCON_IP, PASSW) as mcr:
 			# Minecraft command to spawn X near player
 			#resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
