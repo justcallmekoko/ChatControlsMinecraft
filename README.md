@@ -36,6 +36,8 @@ The bot can be controlled directly from Twitch Chat using Cheers. When Cheers of
 | ----- | ------ |
 | Cheer1  | Place one obsidian in a random coordinate near me |
 | Cheer2  | Set weather to always clear |
+| Cheer7  | Give me cobblestone |
+| Cheer14 | Give me diamond |
 | Cheer19 | Set weather to always thunderstorm |
 | Cheer21 | Set time to night |
 | Cheer22 | Set my level to one |
