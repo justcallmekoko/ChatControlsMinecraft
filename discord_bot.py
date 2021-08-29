@@ -40,6 +40,7 @@ INITIAL_CHANNELS = str(os.getenv('INITIAL_CHANNELS'))
 CLIENT_ID=os.getenv('CLIENT_ID')
 API_TOKEN=os.getenv('API_TOKEN')
 PREFIX=os.getenv('PREFIX')
+HOST_USER=os.getenv('HOST_USER')
 
 global obj_list
 obj_list = []

@@ -6,6 +6,7 @@ from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
 HOST_USER = os.getenv('HOST_USER')
+RCON_IP=os.getenv('RCON_IP')
 
 class Effect():
 	name = '!effect'
@@ -57,7 +58,7 @@ class Effect():
 				found = True
 				ent = str(item[1])
 				
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			# Minecraft command to spawn X near player
 			#resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 			resp = mcr.command('/effect give ' + str(HOST_USER) + ' ' + str(ent))
@@ -69,7 +70,7 @@ class Effect():
 
 	async def run(self, message):			
 		print ('Spawning...')
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			# Minecraft command to spawn X near player
 			resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 

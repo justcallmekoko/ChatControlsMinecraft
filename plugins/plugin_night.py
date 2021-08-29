@@ -43,7 +43,7 @@ class Night():
 		
 		
 				
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			# Minecraft command to spawn X near player
 			#resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 			resp = mcr.command('/time set night')
@@ -55,7 +55,7 @@ class Night():
 
 	async def run(self, message):			
 		print ('Spawning...')
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			# Minecraft command to spawn X near player
 			resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
 

@@ -4,6 +4,7 @@ from mcrcon import MCRcon
 from discord.ext.tasks import loop
 
 PASSW = os.getenv('RCON_PASSWORD')
+RCON_IP=os.getenv('RCON_IP')
 
 class ClearWeather():
 	name = '!clearweather'
@@ -42,7 +43,7 @@ class ClearWeather():
 			
 	async def runCheer(self, user, amount):
 		print ('Running clear weather enabled on...')
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': clear weather enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
 
@@ -52,7 +53,7 @@ class ClearWeather():
 	async def stop(self, message):
 		if self.looping:
 			print ('Running clear weather off...')
-			with MCRcon("127.0.0.1", PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW) as mcr:
 				#resp = mcr.command('/say clear weather disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"clear weather disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -75,7 +76,7 @@ class ClearWeather():
 			
 		if message.content.split(' ')[1].lower() == 'on' and not self.looping:
 			print ('Running clear weather on...')
-			with MCRcon("127.0.0.1", PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW) as mcr:
 				#resp = mcr.command('/say clear weather enabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"clear weather enabled\",\"color\":\"green\"}]')
 				#print (resp)

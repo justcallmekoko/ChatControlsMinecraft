@@ -29,7 +29,7 @@ class Thunder():
 	@loop(seconds = 1)
 	async def loop_func(self):
 		if self.looping:
-                        with MCRcon("127.0.0.1", PASSW) as mcr:
+                        with MCRcon(RCON_IP, PASSW) as mcr:
                                 resp = mcr.command('/weather thunder')
                                 #print (resp)
                                 mcr.disconnect()
@@ -42,7 +42,7 @@ class Thunder():
 			
 	async def runCheer(self, user, amount):
 		print ('Running thunder weather enabled on...')
-		with MCRcon("127.0.0.1", PASSW) as mcr:
+		with MCRcon(RCON_IP, PASSW) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': thunder weather enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
 
@@ -52,7 +52,7 @@ class Thunder():
 	async def stop(self, message):
 		if self.looping:
 			print ('Running thunder weather off...')
-			with MCRcon("127.0.0.1", PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW) as mcr:
 				#resp = mcr.command('/say clear weather disabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"thunder weather disabled\",\"color\":\"red\"}]')
 				#print (resp)
@@ -75,7 +75,7 @@ class Thunder():
 			
 		if message.content.split(' ')[1].lower() == 'on' and not self.looping:
 			print ('Running thunder weather on...')
-			with MCRcon("127.0.0.1", PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW) as mcr:
 				#resp = mcr.command('/say clear weather enabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"thunder weather enabled\",\"color\":\"green\"}]')
 				#print (resp)
