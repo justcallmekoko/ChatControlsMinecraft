@@ -26,7 +26,7 @@ class ClearWeather():
 	@loop(seconds = 1)
 	async def loop_func(self):
 		if self.looping:
-                        with MCRcon("127.0.0.1", PASSW) as mcr:
+                        with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
                                 resp = mcr.command('/weather clear')
                                 #print (resp)
                                 mcr.disconnect()
