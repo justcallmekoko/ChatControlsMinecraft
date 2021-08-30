@@ -33,7 +33,7 @@ class TorchArrows():
 	async def loop_func(self):
 		if self.looping:
 			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
-				resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run setblock ~0 ~0 ~0 torch')
+				resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b}] run setblock ~0 ~0 ~0 torch')
 				resp = mcr.command('/kill @e[type=arrow,nbt={inGround:1b}]')
 				#print (resp)
 				mcr.disconnect()
