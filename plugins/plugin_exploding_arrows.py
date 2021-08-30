@@ -26,8 +26,8 @@ class ExplodingArrows():
 	@loop(seconds = 0.1)
 	async def loop_func(self):
 		if self.looping:
-			with MCRcon("127.0.0.1", PASSW) as mcr:
-				resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b,pickup:2b}] run summon tnt')
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
+				resp = mcr.command('/execute at @e[type=arrow,nbt={inGround:1b}] run summon tnt')
 				resp = mcr.command('/kill @e[type=arrow,nbt={inGround:1b}]')
 				#print (resp)
 				mcr.disconnect()
@@ -62,7 +62,7 @@ class ExplodingArrows():
 				boop = False
 			
 	async def runCheer(self, user, amount):
-		print ('Running lava arrows on...')
+		print ('Running exploding arrows on...')
 		with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 			resp = mcr.command('/tellraw @a [{\"text\":\"' + user + ': exploding arrows enabled\",\"color\":\"green\"}]')
 			mcr.disconnect()
@@ -82,7 +82,7 @@ class ExplodingArrows():
 		if message.content.split(' ')[1].lower() == 'on' and not self.looping:
 			print ('Running Exploding arrows on...')
 
-			with MCRcon("127.0.0.1", PASSW) as mcr:
+			with MCRcon(RCON_IP, PASSW, int(RCON_PORT)) as mcr:
 				#resp = mcr.command('/say Exploding arrows enabled')
 				resp = mcr.command('/tellraw @a [{\"text\":\"exploding arrows enabled\",\"color\":\"green\"}]')
 				#print (resp)
